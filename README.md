@@ -1,5 +1,7 @@
 Fork of 8chanX that adds features to tvch.
 
+To install: https://github.com/dunkvol4/TvchX/raw/main/Tvch-x.user.js
+
 This userscript adds various features and options like:
  * Gallery
  * Filters
