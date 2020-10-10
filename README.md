@@ -9,7 +9,7 @@ This userscript adds various features and options like:
  * Post and image counts in the menu
  * Many other poorly written hacks
 
-TvchX contains modifications designed to improve compatibility with NPFchan.
+TvchX contains modifications designed to improve compatibility with NPFchan. 
 There are also at the time of this writing two (poorly-implemented) features that weren't in the original 8chanX:
   * Animate .gif thumbnails
   * Off-site favorites
