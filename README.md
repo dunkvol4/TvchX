@@ -1,9 +1,3 @@
-#![8](https://cdn.rawgit.com/Pashe/8chanX/2-0_pure/images/logo.svg)chanX 2.0 Pure
-#[Click here to install](https://github.com/Pashe/8chanX/raw/2-0_pure/8chan-x.user.js)
-
-This branch removes a few features in order to improve compatibility. You should not use this branch if [2.0](https://github.com/Pashe/8chanX/tree/2-0) works for you.
-***
-
 This userscript adds various features and options like:
  * Gallery
  * Filters
@@ -14,13 +8,20 @@ This userscript adds various features and options like:
  * Relative post dates
  * Post and image counts in the menu
  * Many other poorly written hacks
- * Not as dead as tux's version
+
+TvchX contains modifications designed to improve compatibility with NPFchan.
+There are also at the time of this writing two (poorly-implemented) features that weren't in the original 8chanX:
+  * Animate .gif thumbnails
+  * Off-site favorites
+ 
 
 This is a userscript, you will need an addon to run it properly
 
 Browser|Addon
 ----   |----
 Firefox|[Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
+       |[Tampermonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
+       
 Chrome |[Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 
 ####Key bindings
