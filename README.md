@@ -1,4 +1,4 @@
-Adds various features to tvch.moe
+Fork of 8chanX that adds features to tvch.
 
 This userscript adds various features and options like:
  * Gallery
