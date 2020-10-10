@@ -1,3 +1,5 @@
+Adds various features to tvch.moe
+
 This userscript adds various features and options like:
  * Gallery
  * Filters
