@@ -135,7 +135,6 @@ settingsMenu.innerHTML = sprintf('<span style="font-size:8pt;">TvchX %s</span>',
 + '<tr><td class="chx_FaveField">Board Name</td><td><input type="text" name="favBoardName4" style="width:12em"></td><td class="chx_FaveField">Board URL</td><td><input type="text" name="favBoardURL4" style="width:12em"></td>'
 + '<tr><td class="chx_FaveField">Board Name</td><td><input type="text" name="favBoardName5" style="width:12em"></td><td class="chx_FaveField">Board URL</td><td><input type="text" name="favBoardURL5" style="width:12em"></td>'
 + '</table>'
-+ '<button id="chx_purgeDeadFavorites">' + 'Clean favorites' + '</button>'
 + '</div>';
 
 $(settingsMenu).find(".chx_FilterField").css("text-align", "right");
@@ -1085,52 +1084,6 @@ function initMascot() { //Pashe, based on an anonymous contribution, MIT
 	mascotHolder.appendTo(hostElement);
 	
 	if (isOnCatalog()) {mascotImage.css("z-index", "-100");}
-}
-
-function initpurgeDeadFavorites() { //Pashe, MIT
-	$("#chx_purgeDeadFavorites").click(function() {
-		console.log("Working...");
-		var originalText = $("#chx_purgeDeadFavorites").text();
-		$("#chx_purgeDeadFavorites").text("Working...");
-		$("#chx_purgeDeadFavorites").prop("disabled", true);
-		var boards;
-		$.ajax({
-				url: "/boards.json",
-				async: false,
-				dataType: "json",
-				success: function (response) {boards = response;}
-		});	
-		var boardsURIs = [];
-		var favorites = JSON.parse(localStorage.favorites);
-
-		for (var x in boards) {
-			if (!boards.hasOwnProperty(x)) {continue;}
-			boardsURIs.push(boards[x].uri);
-		}
-		
-		if (boardsURIs.length > 0) {
-			for (var i=0; i<favorites.length; i++) {
-				var board = favorites[i];
-				if (($.inArray(board, boardsURIs) == -1)) {
-					$.ajax({
-						url: "/" + board + "/",
-						async: false,
-						statusCode: {404: function() {
-							unfavorite(board);
-							console.log("Purge board /" + board + "/");
-						}},
-						success: function () {console.log("Keep unlisted board /" + board + "/");},
-						type: "HEAD"
-					});
-				} else {
-					console.log("Keep listed board /" + board + "/");
-				}
-			}
-		}
-		console.log("Done");
-		$("#chx_purgeDeadFavorites").text(originalText + " - done");
-		$("#chx_purgeDeadFavorites").prop("disabled", false);
-	});
 }
 
 function initDefaultSettings() { //Pashe, MIT
