@@ -1,11 +1,8 @@
 // ==UserScript==
-// @name        Pashe's 8chanX v2 [pure]
-// @version     2.0.0.1511219830
-// @description Small userscript to improve 8chan
-// @icon        https://cdn.rawgit.com/Pashe/8chanX/2-0_pure/images/logo.svg
-// @namespace   https://github.com/Pashe/8chanX/tree/2-0
-// @updateURL   https://github.com/Pashe/8chanX/raw/2-0_pure/8chan-x.meta.js
-// @downloadURL https://github.com/Pashe/8chanX/raw/2-0_pure/8chan-x.user.js
+// @name        TvchX
+// @namespace   TvchX
+// @version     3.0
+// @description Small userscript to improve tvch.moe
 // @grant       none
 
 // @require     https://code.jquery.com/ui/1.11.2/jquery-ui.min.js
@@ -13,16 +10,9 @@
 // @require     https://raw.githubusercontent.com/rmm5t/jquery-timeago/master/jquery.timeago.js
 // @require     https://raw.githubusercontent.com/samsonjs/strftime/master/strftime.js
 
-// @match       *://hatechan.co/*
-// @match       *://8chan.co/*
-// @match       *://h.8chan.co/*
-// @match       *://h.8ch.net/*
-// @match       *://jp.8chan.co/*
-// @match       *://jp.8ch.net/*
-// @match       *://sys.8ch.net/*
-// @match       *://8ch.net/*
-// @exclude     *.json
-// @exclude     *.txt
+// @match       *://tvch.moe/*
+// @match       *://smuglo.li/*
+
 // ==/UserScript==
 
 /*Contributors
@@ -32,6 +22,7 @@
 ** 7185
 ** anonish
 ** Pashe
+** vol4
 */
 
 function chxErrorHandler(e, section) {
@@ -56,7 +47,7 @@ function chxErrorHandler(e, section) {
 	};
 	
 	console.error(sprintf(
-		"8chanX experienced an error. Please include the following information with your report:\n"+
+		"TvchX experienced an error. Please include the following information with your report:\n"+
 		"[code]%s in %s/%s @ L%s C%s: %s\n\nVersion: %s (2-0_pure@%s)\nGreasemonkey: %s\nActive page: %s\nBrowser: %s\nUser agent: %s\nLocation: %s\nStack:\n%s[/code]",
 		rptObj.name, rptObj.file, rptObj.section, rptObj.line, rptObj.col, rptObj.msg,
 		rptObj.scriptName, rptObj.scriptVersion,
@@ -68,7 +59,7 @@ function chxErrorHandler(e, section) {
 		rptObj.stack
 	));
 	
-	alert("8chanX experienced an error. Check the console for details (typically F12).");
+	alert("TvchX experienced an error. Check the console for details (typically F12).");
 }
 
 try {
@@ -97,14 +88,15 @@ var thisBoardSettings;
 var settingsMenu = window.document.createElement('div');
 
 if (window.Options) {
-	var tab = window.Options.add_tab('8chanX', 'times', '8chanX');
+	var tab = window.Options.add_tab('TvchX', 'times', 'TvchX');
 	$(settingsMenu).appendTo(tab.content);
 }
 
-settingsMenu.innerHTML = sprintf('<span style="font-size:8pt;">8chanX %s pure</span>', GM_info.script.version)
+settingsMenu.innerHTML = sprintf('<span style="font-size:8pt;">TvchX %s</span>', GM_info.script.version)
 + '<div style="overflow:auto;height:100%;">' //General
-+ '<label><input type="checkbox" name="catalogLinks">' + 'Force catalog links' + '</label><br>'
++ '<label><input type="checkbox" name="catalogLinks">' + 'Force catalog links on favorite boards.' + '</label><br>'
 + '<label><input type="checkbox" name="revealImageSpoilers">' + 'Reveal image spoilers' + '</label><br>'
++ '<label><input type="checkbox" name="GifAnimate">' + 'Animate GIF thumbnails' + '</label><br>'
 + '<label><input type="checkbox" name="hideNoFilePosts">' + 'Hide posts without files' + '</label><br>'
 + '<label><input type="checkbox" name="keyboardShortcutsEnabled">' + 'Enable keyboard shortcuts' + '</label><br>'
 + '<hr>' //How information is displayed
@@ -134,6 +126,15 @@ settingsMenu.innerHTML = sprintf('<span style="font-size:8pt;">8chanX %s pure</s
 
 + '</table>'
 + '<hr>' //Other shit
++ '<h3>Off-Site Favorites</h3>'
++ '<label><input type="checkbox" name="offSiteFaves">' + 'Enable Off-Site Favorites' + '</label><br>'
++ '<table style="text-align:center;">'
++ '<tr><td class="chx_FaveField">Board Name</td><td><input type="text" name="favBoardName1" style="width:12em"></td><td class="chx_FaveField">Board URL</td><td><input type="text" name="favBoardURL1" style="width:12em"></td>'
++ '<tr><td class="chx_FaveField">Board Name</td><td><input type="text" name="favBoardName2" style="width:12em"></td><td class="chx_FaveField">Board URL</td><td><input type="text" name="favBoardURL2" style="width:12em"></td>'
++ '<tr><td class="chx_FaveField">Board Name</td><td><input type="text" name="favBoardName3" style="width:12em"></td><td class="chx_FaveField">Board URL</td><td><input type="text" name="favBoardURL3" style="width:12em"></td>'
++ '<tr><td class="chx_FaveField">Board Name</td><td><input type="text" name="favBoardName4" style="width:12em"></td><td class="chx_FaveField">Board URL</td><td><input type="text" name="favBoardURL4" style="width:12em"></td>'
++ '<tr><td class="chx_FaveField">Board Name</td><td><input type="text" name="favBoardName5" style="width:12em"></td><td class="chx_FaveField">Board URL</td><td><input type="text" name="favBoardURL5" style="width:12em"></td>'
++ '</table>'
 + '<button id="chx_purgeDeadFavorites">' + 'Clean favorites' + '</button>'
 + '</div>';
 
@@ -142,10 +143,11 @@ $(settingsMenu).find('input').css("max-width", "100%");
 
 
 var defaultSettings = {
-	'precisePages': true,
+	'precisePages': false,
 	'failToCatalogPages': false,
-	'catalogLinks': true,
+	'catalogLinks': false,
 	'revealImageSpoilers': false,
+    'GifAnimate': false,
 	'reverseImageSearch': true,
 	'parseTimestampImage': true,
 	'localTime': true,
@@ -157,6 +159,17 @@ var defaultSettings = {
 	'filterDefaultStubs': false,
 	'filterDefault': false,
 	'hideNoFilePosts': false,
+    'offSiteFaves': false,
+    'favBoardName1': '',
+    'favBoardURL1': '',
+    'favBoardName2': '',
+    'favBoardURL2': '',
+    'favBoardName3': '',
+    'favBoardURL3': '',
+    'favBoardName4': '',
+    'favBoardURL4': '',
+    'favBoardName5': '',
+    'favBoardURL5': '',
 };
 
 function getSetting(key) {
@@ -461,7 +474,6 @@ var RISProviders = {
 
 var RISProvidersBoards = {
 	"##ALL": ["google", "iqdb", "saucenao", "tineye", "karmadecay"],
-	"furry": ["harrylu"],
 };
 
 function addRISLinks(image) { //Pashe, 7185, WTFPL
@@ -652,8 +664,8 @@ function expandGalleryImage(index) { //Pashe, WTFPL
 			"display":    "block"
 		});
 	} else if (isVideo(fileExtension)) {
-		image = image.match(/player\.php\?v=([^&]*[a-f0-9]+\.[a-z0-9]+).*/i)[1];
-		expandedImage = $(sprintf('<video class="chx_galleryExpandedImage" src="%s" autoplay controls></video>', image));
+		image = image.match(/player\.php\?v=([^&]*[0-9]+\.[a-z0-9]+).*/i)[1];
+		expandedImage = $(sprintf('<video class="chx_galleryExpandedImage" src="%s" autoplay controls>Your browser is shit</video>', image));
 		expandedImage.css({
 			"max-height": "98%",
 			"max-width":  "100%",
@@ -742,11 +754,8 @@ function runFilter() { //Pashe, WTFPL
 		jqObj: $this,
 		// stdObj: this,
 	};
-	
-	if (thisPost.trip == "!!tKlE5XtNKE") {
-		$this.find("span.trip").after($(' <span class="capcode" title="Green is my pepper; I shall not want."><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAFo9M/3AAADgUlEQVQ4y2VTbUyTVxS+VZaYqMtcHFHjZCEbsgwR2jS0EKCLSJnMSoGy0toKFUvpB/TjpX37SfuuDChSJlTHqiIBqTJF14JMous0hERj5uIPib+XLCbLsvhj/tig58y+Vea28+e55z7POffce88hhnYBWTf9aTGyi/H5oxxidYqhN65AgohkONmJsR/7UqFkK5KW3Pc2uFtK0KYqxsC1I5mY3mjbdBpP3dUQYjhfe6adKk11aAtWgzfV24lJJ3xumZCCbkwEgcQxHpFtyv6IYg6AdVAE5HUzqHkl3pnmv05FtD+Pzh79I733xW1JhjSPHP6zc1wF1C0tMBc9EFp2QexhFMOLlsPEINmfpSvNp3y28rVuXyXQ9jIwh8uh53oT9sw07yU7Xh5hE7wPDlkxnsjd8VjJ24WOuEr8EAczpKm3hvMCOFNL4UnyX6Of2Uh9ffHbodGGkZNJGp2t+c+iTxh/mpt9/Cgj8sw1o93fAENJLQwndCmbpwC/XLYlWPKEQyjqnlJj17VWmHg0A4pRIXy78h2MLbkz76iXFJY7nFXY0V8NrqsKVIcE4LksTTEJxdP1OixqPrroCvCOfAomqgjs56tTzJx6ZV1gqih4QnWVgd1XgZ3qfeiI1a72XpGOZcj8PNKwdYvWJd6HXjn3qSp7G2q6uL//77rGOdW/fN+5puGRW67fZqeCtQOSd7iJCzL+Ky50r4NFZkFKiC5yaGPaUQTLiuwx+dLns/pfKXc9aiyl2H/HjOM/MOgIiZEO1+BQRIIDicZz3tvynWwj3VRuYDMdc1bm0DH5T3RcifbpxjXn9Gfgnm8B5no70KMycE3UgW9CBgM3jqeiD4IYvR/C/sX2g+vltqkLj3R6qpA+24q2sxowTirAGtfAV/fPoOeSBRv7+GD6RgbhpBci35vx5KIG+260/ZPARHZuNTZz5x1GITr1glWbpwKsQ2LwTcrByohAz/DBEhGB40JNynu1HgNx5YrvinovG9xRnJeVxuN7cg6Z67jPe4xlSOsESL1oSzoggm6LEIw0H6ivP0HntGTNn2jC4IJy2X+pbhebQLrlLc7LQt7Q5O2565QWodMgBLr/ILjdlUh9/CF28XKQsvKw+3I1Oi7W/BIYrCpMB/gna9kPIK+NN5G+udkr274NdB+8i/b9uRYeIbtFWVmnSzkbF0o2bT7wSsfNzmPxb3jllxw700zlAAAAAElFTkSuQmCC" style="width:16px;height:16px;" /> 8chanX</span>'));
-		return;
-	}
+
+
 	
 	if (isMod) {return;}
 	
@@ -814,51 +823,34 @@ function initSettings() {
 	}
 }
 
-function initMenu() { //Pashe, WTFPL
+function initMenu() { //Pashe and vol4, WTFPL
 	var menu = window.document.getElementsByClassName("boardlist")[0];
 	var $menu = $(menu);
-	
-	// [data-description="0"] - home, boards
-	// [data-description="1"] - pinned boards (/b/, /meta/, /int/)
-	// [data-description="2"] - twitter
-	// [data-description="3"] - top boards
-	
-	$('[data-description="1"], [data-description="2"]').hide();
-	$(".boardlist.bottom").find('[data-description="0"], [data-description="2"], .favorite-boards').hide(); //Hide stuff that's at the top already
-	$(".boardlist.bottom").find('[data-description="1"]').show(); //Show pinned boards at the bottom
-	$(".boardlist.bottom").find('.favorite-boards').next().hide(); //Hide the watchlist link at the bottom
-	
-	if ((!$(".boardlist.bottom").find('[data-description="3"]').length) && ($(".boardlist.bottom").find('[data-description="1"]').length)) {
-		var topBoardsLinks = [];
 
-		$.ajax("/boards-top20.json", {
-			async: true,
-			cache: true,
-			success: function(response) {
-				for (var x in response) {
-					topBoardsLinks.push(sprintf(
-						'<a href="/%s/" title="%s &bull; %s &bull; %s">%s</a>',
-						response[x].uri,
-						response[x].title,
-						response[x].subtitle,
-						response[x].tags.join("/"),
-						response[x].uri
-					));
-				}
-				$(".boardlist.bottom").find('[data-description="1"]').after(sprintf(' <span class="chx_topBoards">[ %s ]</span>', topBoardsLinks.slice(0,15).join(" / ")));
-			}
-		});
-	}
-	
-	if (getSetting('catalogLinks') && !isOnCatalog()) {
-		$('.favorite-boards a').each(function () {
+    if (getSetting('offSiteFaves')) {
+        var fburl1 = (getSetting('favBoardURL1'));
+        var fbname1 = (getSetting('favBoardName1'));
+        var fburl2 = (getSetting('favBoardURL2'));
+        var fbname2 = (getSetting('favBoardName2'));
+        var fburl3 = (getSetting('favBoardURL3'));
+        var fbname3 = (getSetting('favBoardName3'));
+        var fburl4 = (getSetting('favBoardURL4'));
+        var fbname4 = (getSetting('favBoardName4'));
+        var fburl5 = (getSetting('favBoardURL5'));
+        var fbname5 = (getSetting('favBoardName5'));
+        var osf = $('<span class="sub" data-description="4"> [ <a href="' + fburl1 + '" title="Favorite 1">' + fbname1 + '</a> / <a href="' + fburl2 + '" title="Favorite 1">' + fbname2 + '</a> / <a href="' + fburl3 + '" title="Favorite 1">' + fbname3 + '</a> / <a href="' + fburl4 + '" title="Favorite 1">' + fbname4 + '</a> / <a href="' + fburl5 + '" title="Favorite 1">' + fbname5 + '</a> ]</span>');
+        osf.appendTo(menu);
+    }
+
+	if (getSetting('catalogLinks')) {
+        	$('.favorite-boards a').each(function () {
 			$(this).attr("href", $(this).attr("href")+"/catalog.html");
 		});
 	}
-	
+
 	if (isOnThread()) {
 		$('#update_secs').remove();
-		
+
 		var updateNode = $("<span></span>");
 		updateNode.attr("id", "update_secs");
 		updateNode.css("font-family", "'Source Code Pro', monospace");
@@ -866,7 +858,7 @@ function initMenu() { //Pashe, WTFPL
 		updateNode.attr("title","Update thread");
 		updateNode.click(function() {$('#update_thread').click();});
 		updateNode.appendTo($menu);
-		
+
 		var statsNode = $("<span></span>");
 		statsNode.html(
 			 '<span title="Posts" id="chx_menuPosts">---</span> / '
@@ -876,24 +868,23 @@ function initMenu() { //Pashe, WTFPL
 		statsNode.attr("id", "menuStats");
 		statsNode.css("padding-left", "3pt");
 		statsNode.appendTo($menu);
-		
+
 		updateMenuStats();
-		
+
 		var galleryButton = $('<a href="javascript:void(0)" title="Gallery"><i class="fa fa-th-large chx_menuGalleryButton"></i></a>');
 		var menuButtonHolder = $('span.sub[data-description=0]').first();
-		
+
 		menuButtonHolder.html(function() {return this.innerHTML.replace("]", " / ");});
-		
+
 		galleryButton.appendTo(menuButtonHolder);
 		menuButtonHolder.html(function() {return this.innerHTML + " ]";});
-		
+
 		$(".chx_menuGalleryButton").on("click", toggleGallery); //galleryButton isn't the same as $(".chx_menuGalleryButton") after appending the ] to menuButtonHolder.
 	}
 }
 
 function initRevealImageSpoilers() { //Tux et al, MIT
 	if (!getSetting('revealImageSpoilers')) {return;}
-	
 	$('.post-image').each(function() {
 		var pic;
 		if ($(this)[0].tagName == "IMG") {
@@ -901,12 +892,12 @@ function initRevealImageSpoilers() { //Tux et al, MIT
 		} else if ($(this)[0].tagName == "CANVAS") {
 			pic = $(this).next();
 		} else {return;}
-		
+
 		var picUrl = pic.attr("src");
 		if (picUrl.indexOf('spoiler.png') >= 0) {
 			pic.attr("src", $(this).parent().attr("href"));
 			pic.addClass("chx_unspoileredImage");
-			
+
 			pic.css({
 				"width":      "auto",
 				"height":     "auto",
@@ -915,6 +906,22 @@ function initRevealImageSpoilers() { //Tux et al, MIT
 			});
 		}
 	});
+}
+
+function initGifAnimate() { //Anon and vol4, MIT
+
+    if (!getSetting('GifAnimate')) {return;}
+    $('document').ready(function () {
+        var animateGif = function () {
+            if ($(this).children('img.post-image').attr('src') != '/static/spoiler.png')
+                $(this).children('img.post-image').attr('src', $(this).attr('href'));
+        }
+
+        $('div.file').children('a[href*=".gif"]').each(animateGif);
+        $(document).on('new_post', function (e, post) {
+            $(post).find('div.file').children('a[href*=".gif"]').each(animateGif);
+        });
+    });
 }
 
 function initKeyboardShortcuts() { //Pashe, heavily influenced by Tux et al, WTFPL
@@ -962,7 +969,7 @@ function initCatalog() { //Pashe, WTFPL
 	//addCatalogPages
 	if (getSetting("precisePages")) { 
 		$(".thread").each(function (e, ele) {
-			var threadId = $(ele).html().match(/<a href=".*\/([0-9]+).html?">/)[1];
+			var threadId = $(ele).html().match(/<a href="[^0-9]*([0-9]+).html?">/)[1];
 			var threadPage = getThreadPage(threadId, thisBoard, true);
 			
 			if (threadPage < 1) {return;}
@@ -976,7 +983,7 @@ function initCatalog() { //Pashe, WTFPL
 	//Last Modified
 	$(".thread").each(function (e, ele) {
 			var $this = $(this);
-			var threadId = $this.html().match(/\/res\/([0-9]+).html?">/)[1];
+			var threadId = $this.html().match(/<a href="[^0-9]*([0-9]+).html?">/)[1];
 			var threadPage = getThreadPage(threadId, thisBoard, true);
 			
 			var timestamp = getThreadLastModified(threadId, thisBoard, true);
@@ -990,40 +997,7 @@ function initCatalog() { //Pashe, WTFPL
 			lmTimeElement.html("<br>" + $.timeago(timestamp * 1000));
 			lmTimeElement.appendTo($this.find("strong").first());
 		});
-	
-	//highlightCatalogAutosage
-	$.ajax({
-		url: "/settings.php?board="+thisBoard,
-		async: true,
-		cache: true,
-		dataType: "json",
-		success: function (response) {
-			updateBoardSettings(response);
-			
-			$(".replies").each(function (e, ele) {
-				var eReplies = $(ele).html().match(/R: ([0-9]+)/)[1];
-				if (eReplies>bumpLimit) {
-					$(ele).html(function(e, html) {
-						return html.replace(/R: ([0-9]+)/, "<span style='color:#f00;'>R: $1</span>");
-					});
-				}
-			});
-		}
-	});
-	
-	//setCatalogImageSize
-	var catalogStorage = JSON.parse(localStorage.catalog);
-	if (!catalogStorage.image_size) {
-		catalogStorage.image_size = "large";
-		localStorage.catalog = JSON.stringify(catalogStorage);
-		
-		$(".grid-li").removeClass("grid-size-vsmall");
-		$(".grid-li").removeClass("grid-size-small");
-		$(".grid-li").removeClass("grid-size-large");
-		$(".grid-li").addClass("grid-size-" + catalogStorage.image_size);
-		$("#image_size").val(catalogStorage.image_size);
-	}
-	
+
 	//addCatalogNullImagePlaceholders
 	$("img[src=''], img[src='/static/no-file.png']").attr("src", "data:image/svg+xml;base64,PHN2ZyB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgaGVpZ2h0PSIyMDAiIHdpZHRoPSIyMDAiIHZlcnNpb249IjEuMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwtODYwKSI+PHRleHQgc3R5bGU9ImxldHRlci1zcGFjaW5nOjBweDt0ZXh0LWFuY2hvcjptaWRkbGU7d29yZC1zcGFjaW5nOjBweDt0ZXh0LWFsaWduOmNlbnRlcjsiIHhtbDpzcGFjZT0icHJlc2VydmUiIGZvbnQtc2l6ZT0iNjRweCIgeT0iOTMwIiB4PSI5NSIgZm9udC1mYW1pbHk9IidBZG9iZSBDbGVhbiBVSScsIHNhbnMtc2VyaWYiIGxpbmUtaGVpZ2h0PSIxMjUlIiBmaWxsPSIjMDAwMDAwIj48dHNwYW4geD0iOTUiIHk9IjkyOSI+Tm88L3RzcGFuPjx0c3BhbiB4PSI5NSIgeT0iMTAxMCI+SW1hZ2U8L3RzcGFuPjwvdGV4dD48L2c+PC9zdmc+");
 }
@@ -1167,10 +1141,6 @@ function initDefaultSettings() { //Pashe, WTFPL
 	if (window.localStorage.imageHover === undefined) window.localStorage.imageHover = true;
 }
 
-function initFavicon() { //Pashe, WTFPL
-	var faviconUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAFo9M/3AAAAAXNSR0IArs4c6QAAAeNJREFUOMu9kk1IVGEUhp/3jj8zukiYIGkh6iftwzZGaw1EqJW5KAxsvhmFgta1DGpRGTF35g5EURBGQRuJqG21iCKIaOUVCqHdYIU/k849LXIMEymCenbncM7hvO85sIF6fTgv6GELfb44qc0gFz6wwN4D4Hxo7MRmi/PhQ+BIU1++NKSkvpjALoAmM3tsCp7H0eShHec4Xzzs8uEFAPXnouZF1b8BYHyIK4UekDW2aVpU/Q3YsTiautc9Wezcm6tkMkHpOEmyP45+6vh7UttTJpfrPJ89MLJWfT27sK3A5fc8NXgFdifbP/xFzoezwPAPnzQWlwszAPty0e666h/lfGiNbZ0vvgANSDphZlfMdDlojO4ev5nGgpla22pbYjZo0sn5SuGinC9Ng50BMEt1zFf8Z/4rv7W6e/xqR6q15RFoYIuZcG0uKpxVI+714VEZgya1S3pWy6zcTpbalSGZWCe439xaq85dP10D6PXFMaG7wLvA+fCc86VEUlnirbBZzEZal9PLGdWXCGy0hbWuRjNAEGhp47vScj5cAdK19Zbswo2J6raz58ujmF0Cun5RfyuuZifkfJgDIuArsmlLgk8SQ8jaMavG0dToH5noThUPktIwiVYV8HKunH/SePx/ynf5T8EXjP2zGwAAAABJRU5ErkJggg==";
-	$('<link></link>').attr("rel", "shortcut icon").attr("href", faviconUrl).appendTo($("head").first());
-}
 
 function initFlagIcons() { //Anon from >>>/tech/60489, presumably WTFPL or similar
 	if (!$("#user_flag").length) {return;}
@@ -1235,13 +1205,13 @@ $(window.document).ready(function() { try {
 	initFormattedTime();
 	initMascot();
 	initRevealImageSpoilers();
+    initGifAnimate();
 	initRISLinks();
 	initParseTimestampImage();
 	initNotifications();
 	initFlagIcons();
 	initKeyboardShortcuts();
 	initpurgeDeadFavorites();
-	initFavicon();
 } catch(e) {chxErrorHandler(e, "ready");}});
 
 ////////////////
