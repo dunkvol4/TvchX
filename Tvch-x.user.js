@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        TvchX
-// @namespace   TvchX
+// @namespace   https://github.com/dunkvol4/TvchX
 // @version     3.0
 // @description Small userscript to improve tvch.moe
 // @grant       none
