@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        TvchX
-// @namespace   https://github.com/dunkvol4/TvchX
+// @namespace   TvchX
 // @version     3.0
 // @description Small userscript to improve tvch.moe
 // @grant       none
@@ -243,7 +243,7 @@ function printf() { //alexei et al, 3BSD
 	console.log(sprintf.format.call(null, cache[key], arguments));
 }
 
-function getThreadPage(threadId, boardId, cached) { //Pashe, WTFPL
+function getThreadPage(threadId, boardId, cached) { //Pashe, MIT
 	if ((!cached) || (cachedPages === null)) {
 		$.ajax({
 			url: "/" + boardId + "/threads.json",
@@ -256,7 +256,7 @@ function getThreadPage(threadId, boardId, cached) { //Pashe, WTFPL
 	return calcThreadPage(cachedPages, threadId);
 }
 
-function calcThreadPage(pages, threadId) { //Pashe, WTFPL
+function calcThreadPage(pages, threadId) { //Pashe, MIT
 	var threadPage = -1;
 	var precisePages = getSetting("precisePages");
 	
@@ -282,7 +282,7 @@ function calcThreadPage(pages, threadId) { //Pashe, WTFPL
 	return threadPage;
 }
 
-function getThreadLastModified(threadId, boardId, cached) { //Pashe, WTFPL
+function getThreadLastModified(threadId, boardId, cached) { //Pashe, MIT
 	if ((!cached) || (cachedPages === null)) {
 		$.ajax({
 			url: "/" + boardId + "/threads.json",
@@ -295,7 +295,7 @@ function getThreadLastModified(threadId, boardId, cached) { //Pashe, WTFPL
 	return calcThreadLastModified(cachedPages, threadId);
 }
 
-function calcThreadLastModified(pages, threadId) { //Pashe, WTFPL
+function calcThreadLastModified(pages, threadId) { //Pashe, MIT
 	var threadLastModified = -1;
 	
 	for (var pageIdx in pages) {
@@ -316,15 +316,15 @@ function calcThreadLastModified(pages, threadId) { //Pashe, WTFPL
 	return threadLastModified;
 }
 
-function getThreadPosts() { //Pashe, WTFPL
+function getThreadPosts() { //Pashe, MIT
 	return $(".post").length;
 }
 
-function getThreadImages() { //Pashe, WTFPL
+function getThreadImages() { //Pashe, MIT
 	return $(".post-image").length;
 }
 
-function getFileExtension(filename) { //Pashe, WTFPL
+function getFileExtension(filename) { //Pashe, MIT
 	if (filename.match(/\.([a-z0-9]+)(&loop.*)?$/i) !== null) {
 		return filename.match(/\.([a-z0-9]+)(&loop.*)?$/i)[1];
 	} else if (filename.match(/https?:\/\/(www\.)?youtube.com/)) {
@@ -334,15 +334,15 @@ function getFileExtension(filename) { //Pashe, WTFPL
 	}
 }
 
-function isImage(fileExtension) { //Pashe, WTFPL
+function isImage(fileExtension) { //Pashe, MIT
 	return ($.inArray(fileExtension, ["jpg", "jpeg", "gif", "png"]) !== -1);
 }
 
-function isVideo(fileExtension) { //Pashe, WTFPL
+function isVideo(fileExtension) { //Pashe, MIT
 	return ($.inArray(fileExtension, ["webm", "mp4"]) !== -1);
 }
 
-function updateBoardSettings(response) { //Pashe, WTFPL
+function updateBoardSettings(response) { //Pashe, MIT
 	thisBoardSettings = response;
 	
 	thisBoardAnonName = thisBoardSettings.anonymous;
@@ -352,7 +352,7 @@ function updateBoardSettings(response) { //Pashe, WTFPL
 ////////////////
 //MENU BAR
 ////////////////
-function updateMenuStats() { //Pashe, WTFPL
+function updateMenuStats() { //Pashe, MIT
 	var nPosts = getThreadPosts(thisThread, thisBoard, false);
 	
 	$.ajax({
@@ -413,7 +413,7 @@ function updateMenuStats() { //Pashe, WTFPL
 ////////////////
 //KEYBOARD SHORTCUTS
 ////////////////
-function reloadPage() { //Pashe, WTFPL
+function reloadPage() { //Pashe, MIT
 	if (isOnThread()) {
 		window.$('#update_thread').click();
 		updateMenuStats();
@@ -422,7 +422,7 @@ function reloadPage() { //Pashe, WTFPL
 	}
 }
 
-function showQR() { //Pashe, WTFPL
+function showQR() { //Pashe, MIT
 	window.$(window).trigger('cite');
 	$("#quick-reply textarea").focus();
 }
@@ -436,7 +436,7 @@ function toggleExpandAll() { //Tux et al, MIT
 	}
 }
 
-function goToCatalog() { //Pashe, WTFPL
+function goToCatalog() { //Pashe, MIT
 	if (isOnCatalog()) {return;}
 	window.location = sprintf("/%s/catalog.html", thisBoard);
 }
@@ -476,7 +476,7 @@ var RISProvidersBoards = {
 	"##ALL": ["google", "iqdb", "saucenao", "tineye", "karmadecay"],
 };
 
-function addRISLinks(image) { //Pashe, 7185, WTFPL
+function addRISLinks(image) { //Pashe, 7185, MIT
 	var thisBoardRISProviders = (RISProvidersBoards["##ALL"].concat(RISProvidersBoards[thisBoard]||[]));
 	for (var providerIdx in thisBoardRISProviders) {
 		providerIdx = thisBoardRISProviders[providerIdx];
@@ -550,7 +550,7 @@ var fileExtensionStyles = {
 	"gif": {"background-color": "#ff0", "color": "#000"},
 };
 
-function refreshGalleryImages() { //Pashe, 7185, WTFPL
+function refreshGalleryImages() { //Pashe, 7185, MIT
 	galleryImages = [];
 	
 	$("img.post-image").each(function() {
@@ -568,7 +568,7 @@ function refreshGalleryImages() { //Pashe, 7185, WTFPL
 	});
 }
 
-function openGallery() { //Pashe, WTFPL
+function openGallery() { //Pashe, MIT
 	refreshGalleryImages();
 	
 	var galleryHolder = $("<div id='chx_gallery'></div>");
@@ -632,7 +632,7 @@ function openGallery() { //Pashe, WTFPL
 	}
 }
 
-function closeGallery() { //Pashe, WTFPL
+function closeGallery() { //Pashe, MIT
 	if ($("#chx_galleryExpandedImageHolder").length) {
 		$("#chx_galleryExpandedImageHolder").remove();
 	} else {
@@ -640,7 +640,7 @@ function closeGallery() { //Pashe, WTFPL
 	}
 }
 
-function toggleGallery() { //Pashe, WTFPL
+function toggleGallery() { //Pashe, MIT
 	if ($("#chx_gallery").length) {
 		closeGallery();
 	} else {
@@ -648,7 +648,7 @@ function toggleGallery() { //Pashe, WTFPL
 	}
 }
 
-function expandGalleryImage(index) { //Pashe, WTFPL
+function expandGalleryImage(index) { //Pashe, MIT
 	galleryImageIndex = index;
 	var expandedImage;
 	var image = galleryImages[index].full;
@@ -712,7 +712,7 @@ function jogExpandedGalleryImage(steps) {
 ////////////////
 //FILTERS
 ////////////////
-function hidePost(post, recursive, stubs) { //Pashe, WTFPL
+function hidePost(post, recursive, stubs) { //Pashe, MIT
 	if (!stubs) {
 		post.jqObj.hide();
 		post.jqObj.next("br").remove();
@@ -734,7 +734,7 @@ function hidePost(post, recursive, stubs) { //Pashe, WTFPL
 	}
 }
 
-function runFilter() { //Pashe, WTFPL
+function runFilter() { //Pashe, MIT
 	var $this = $(this);
 	
 	var thisPost = {
@@ -823,7 +823,7 @@ function initSettings() {
 	}
 }
 
-function initMenu() { //Pashe and vol4, WTFPL
+function initMenu() { //Pashe and vol4, MIT
 	var menu = window.document.getElementsByClassName("boardlist")[0];
 	var $menu = $(menu);
 
@@ -908,7 +908,7 @@ function initRevealImageSpoilers() { //Tux et al, MIT
 	});
 }
 
-function initGifAnimate() { //Anon and vol4, MIT
+function initGifAnimate() { //vol4, based on an anonymous contribution, MIT
 
     if (!getSetting('GifAnimate')) {return;}
     $('document').ready(function () {
@@ -924,7 +924,7 @@ function initGifAnimate() { //Anon and vol4, MIT
     });
 }
 
-function initKeyboardShortcuts() { //Pashe, heavily influenced by Tux et al, WTFPL
+function initKeyboardShortcuts() { //Pashe, heavily influenced by Tux et al, MIT
 	if (!getSetting("keyboardShortcutsEnabled")) {return;}
 	
 	$(document).keydown(function(e) {
@@ -963,7 +963,7 @@ function initKeyboardShortcuts() { //Pashe, heavily influenced by Tux et al, WTF
 	});
 }
 
-function initCatalog() { //Pashe, WTFPL
+function initCatalog() { //Pashe, MIT
 	if (!isOnCatalog()) {return;}
 	
 	//addCatalogPages
@@ -1002,12 +1002,12 @@ function initCatalog() { //Pashe, WTFPL
 	$("img[src=''], img[src='/static/no-file.png']").attr("src", "data:image/svg+xml;base64,PHN2ZyB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgaGVpZ2h0PSIyMDAiIHdpZHRoPSIyMDAiIHZlcnNpb249IjEuMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwtODYwKSI+PHRleHQgc3R5bGU9ImxldHRlci1zcGFjaW5nOjBweDt0ZXh0LWFuY2hvcjptaWRkbGU7d29yZC1zcGFjaW5nOjBweDt0ZXh0LWFsaWduOmNlbnRlcjsiIHhtbDpzcGFjZT0icHJlc2VydmUiIGZvbnQtc2l6ZT0iNjRweCIgeT0iOTMwIiB4PSI5NSIgZm9udC1mYW1pbHk9IidBZG9iZSBDbGVhbiBVSScsIHNhbnMtc2VyaWYiIGxpbmUtaGVpZ2h0PSIxMjUlIiBmaWxsPSIjMDAwMDAwIj48dHNwYW4geD0iOTUiIHk9IjkyOSI+Tm88L3RzcGFuPjx0c3BhbiB4PSI5NSIgeT0iMTAxMCI+SW1hZ2U8L3RzcGFuPjwvdGV4dD48L2c+PC9zdmc+");
 }
 
-function initRISLinks() { //Pashe, 7185, WTFPL
+function initRISLinks() { //Pashe, 7185, MIT
 	if (!getSetting("reverseImageSearch")) {return;}
 	$("img.post-image").each(function() {addRISLinks(this);});
 }
 
-function initParseTimestampImage() { //Pashe, WTFPL
+function initParseTimestampImage() { //Pashe, MIT
 	//if (!getSetting("parseTimestampImage")) {break;}
 	try {
 		var minTimestamp = new Date(1985,1).valueOf();
@@ -1043,7 +1043,7 @@ function initNotifications() {
 	Notification.requestPermission();
 }
 
-function initMascot() { //Pashe, based on an anonymous contribution, WTFPL
+function initMascot() { //Pashe, based on an anonymous contribution, MIT
 	if (!getSetting("mascotUrl")) {return;}
 	
 	var mascotUrls = getSetting("mascotUrl").split("|");
@@ -1087,7 +1087,7 @@ function initMascot() { //Pashe, based on an anonymous contribution, WTFPL
 	if (isOnCatalog()) {mascotImage.css("z-index", "-100");}
 }
 
-function initpurgeDeadFavorites() { //Pashe, WTFPL
+function initpurgeDeadFavorites() { //Pashe, MIT
 	$("#chx_purgeDeadFavorites").click(function() {
 		console.log("Working...");
 		var originalText = $("#chx_purgeDeadFavorites").text();
@@ -1133,7 +1133,7 @@ function initpurgeDeadFavorites() { //Pashe, WTFPL
 	});
 }
 
-function initDefaultSettings() { //Pashe, WTFPL
+function initDefaultSettings() { //Pashe, MIT
 	if (window.localStorage.color_ids === undefined) window.localStorage.color_ids = true;
 	if (window.localStorage.videohover === undefined) window.localStorage.videohover = true;
 	if (window.localStorage.useInlining === undefined) window.localStorage.useInlining = true;
@@ -1142,7 +1142,7 @@ function initDefaultSettings() { //Pashe, WTFPL
 }
 
 
-function initFlagIcons() { //Anon from >>>/tech/60489, presumably WTFPL or similar
+function initFlagIcons() { //Anonymous contribution, MIT
 	if (!$("#user_flag").length) {return;}
 	
 	var board = window.location.pathname.replace(/^\/([^/]+).*?$/, "$1");
@@ -1159,7 +1159,7 @@ function initFlagIcons() { //Anon from >>>/tech/60489, presumably WTFPL or simil
 	}
 }
 
-function initFormattedTime() { //Pashe, WTFPL
+function initFormattedTime() { //Pashe, MIT
 	if (!getSetting("dateFormat")) {return;}
 	
 	$("time").text(function() {
@@ -1177,7 +1177,7 @@ function initFormattedTime() { //Pashe, WTFPL
 	});
 }
 
-function initFilter() { //Pashe, WTFPL	
+function initFilter() { //Pashe, MIT	
 	$(".reply").each(runFilter);
 	
 	$.ajax({
@@ -1217,7 +1217,7 @@ $(window.document).ready(function() { try {
 ////////////////
 //EVENT HANDLER FUNCTIONS
 ////////////////
-function onNewPostRISLinks(post) { //Pashe, 7185, WTFPL
+function onNewPostRISLinks(post) { //Pashe, 7185, MIT
 	$("#"+$(post).attr("id")+" img.post-image").each(function() {addRISLinks(this);}); 
 }
 
@@ -1234,7 +1234,7 @@ function onNewPostFormattedTime() {
 	initFormattedTime();
 }
 
-function onNewPostFilter(post) { //Pashe, WTFPL
+function onNewPostFilter(post) { //Pashe, MIT
 	$(post).each(runFilter);
 }
 
