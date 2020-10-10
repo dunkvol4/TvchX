@@ -1164,7 +1164,6 @@ $(window.document).ready(function() { try {
 	initNotifications();
 	initFlagIcons();
 	initKeyboardShortcuts();
-	initpurgeDeadFavorites();
 } catch(e) {chxErrorHandler(e, "ready");}});
 
 ////////////////
