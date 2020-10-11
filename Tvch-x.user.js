@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.0
+// @version     3.0.1
 // @description Small userscript to improve tvch.moe
 // @grant       none
 
@@ -48,7 +48,7 @@ function chxErrorHandler(e, section) {
 	
 	console.error(sprintf(
 		"TvchX experienced an error. Please include the following information with your report:\n"+
-		"[code]%s in %s/%s @ L%s C%s: %s\n\nVersion: %s (2-0_pure@%s)\nGreasemonkey: %s\nActive page: %s\nBrowser: %s\nUser agent: %s\nLocation: %s\nStack:\n%s[/code]",
+		"[code]%s in %s/%s @ L%s C%s: %s\n\nVersion: %s (@%s)\nGreasemonkey: %s\nActive page: %s\nBrowser: %s\nUser agent: %s\nLocation: %s\nStack:\n%s[/code]",
 		rptObj.name, rptObj.file, rptObj.section, rptObj.line, rptObj.col, rptObj.msg,
 		rptObj.scriptName, rptObj.scriptVersion,
 		rptObj.gmVersion,
@@ -1089,7 +1089,6 @@ function initMascot() { //Pashe, based on an anonymous contribution, MIT
 function initDefaultSettings() { //Pashe, MIT
 	if (window.localStorage.color_ids === undefined) window.localStorage.color_ids = true;
 	if (window.localStorage.videohover === undefined) window.localStorage.videohover = true;
-	if (window.localStorage.useInlining === undefined) window.localStorage.useInlining = true;
 	if (window.localStorage.catalogImageHover === undefined) window.localStorage.catalogImageHover = true;
 	if (window.localStorage.imageHover === undefined) window.localStorage.imageHover = true;
 }
