@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.0.1
+// @version     3.0.2
 // @description Small userscript to improve tvch.moe
 // @grant       none
 
@@ -448,10 +448,6 @@ var RISProviders = {
 		"urlFormat" : "https://www.google.com/searchbyimage?image_url=%s",
 		"name"      : "Google"
 	},
-	"iqdb": {
-		"urlFormat" : "http://iqdb.org/?url=%s",
-		"name"      : "iqdb"
-	},
 	"saucenao": {
 		"urlFormat" : "https://saucenao.com/search.php?db=999&url=%s",
 		"name"      : "SauceNAO"
@@ -460,11 +456,6 @@ var RISProviders = {
 		"urlFormat" : "https://www.tineye.com/search/?url=%s",
 		"name"      : "TinEye"
 	},
-	"harrylu": {
-		"urlFormat" : "https://iqdb.harry.lu/?url=%s",
-		"name"      : "Harry.lu (e621)",
-		"shortName" : "E"
-	},
 	"karmadecay": {
 		"urlFormat" : "http://karmadecay.com/%s",
 		"name"      : "Karma Decay"
@@ -472,7 +463,7 @@ var RISProviders = {
 };
 
 var RISProvidersBoards = {
-	"##ALL": ["google", "iqdb", "saucenao", "tineye", "karmadecay"],
+	"##ALL": ["google", "saucenao", "tineye", "karmadecay"],
 };
 
 function addRISLinks(image) { //Pashe, 7185, MIT
