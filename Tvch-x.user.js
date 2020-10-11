@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.0.2
+// @version     3.0.2.1
 // @description Small userscript to improve tvch.moe
 // @grant       none
 
@@ -100,7 +100,7 @@ settingsMenu.innerHTML = sprintf('<span style="font-size:8pt;">TvchX %s</span>',
 + '<label><input type="checkbox" name="hideNoFilePosts">' + 'Hide posts without files' + '</label><br>'
 + '<label><input type="checkbox" name="keyboardShortcutsEnabled">' + 'Enable keyboard shortcuts' + '</label><br>'
 + '<hr>' //How information is displayed
-+ '<label><input type="checkbox" name="reverseImageSearch">' + 'Add reverse image search links' + '</label><br>'
++ '<label><input type="checkbox" name="reverseImageSearch">' + 'Add more reverse image search links' + '</label><br>'
 + '<label><input type="checkbox" name="parseTimestampImage">' + 'Guess original download date of imageboard-style filenames' + '</label><br>'
 + '<label><input type="checkbox" name="precisePages">' + 'Increase page indicator precision' + '</label><br>'
 + '<label><input type="checkbox" name="failToCatalogPages">' + 'Get thread page from catalog.html if thread is not in threads.json' + '</label><br>'
