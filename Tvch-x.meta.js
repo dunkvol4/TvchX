@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        TvchX
-// @version     3.0.2.1
+// @version     3.0.3
 // @description Small userscript to improve tvch
 // @namespace   https://github.com/dunkvol4/TvchX
 // @updateURL   https://github.com/dunkvol4/TvchX/blob/main/Tvch-x.meta.js
