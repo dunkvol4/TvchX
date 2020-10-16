@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.0.2.1
+// @version     3.0.3
 // @description Small userscript to improve tvch.moe
 // @grant       none
 
@@ -95,6 +95,7 @@ if (window.Options) {
 settingsMenu.innerHTML = sprintf('<span style="font-size:8pt;">TvchX %s</span>', GM_info.script.version)
 + '<div style="overflow:auto;height:100%;">' //General
 + '<label><input type="checkbox" name="catalogLinks">' + 'Force catalog links on favorite boards.' + '</label><br>'
++ '<label><input type="checkbox" name="lastUpdated">' + 'Show time since last post in the catalog.' + '</label><br>'
 + '<label><input type="checkbox" name="revealImageSpoilers">' + 'Reveal image spoilers' + '</label><br>'
 + '<label><input type="checkbox" name="GifAnimate">' + 'Animate GIF thumbnails' + '</label><br>'
 + '<label><input type="checkbox" name="hideNoFilePosts">' + 'Hide posts without files' + '</label><br>'
@@ -145,8 +146,9 @@ var defaultSettings = {
 	'precisePages': false,
 	'failToCatalogPages': false,
 	'catalogLinks': false,
+	'lastUpdated': true,
 	'revealImageSpoilers': false,
-    'GifAnimate': false,
+	'GifAnimate': false,
 	'reverseImageSearch': true,
 	'parseTimestampImage': true,
 	'localTime': true,
@@ -158,17 +160,17 @@ var defaultSettings = {
 	'filterDefaultStubs': false,
 	'filterDefault': false,
 	'hideNoFilePosts': false,
-    'offSiteFaves': false,
-    'favBoardName1': '',
-    'favBoardURL1': '',
-    'favBoardName2': '',
-    'favBoardURL2': '',
-    'favBoardName3': '',
-    'favBoardURL3': '',
-    'favBoardName4': '',
-    'favBoardURL4': '',
-    'favBoardName5': '',
-    'favBoardURL5': '',
+	'offSiteFaves': false,
+	'favBoardName1': '',
+	'favBoardURL1': '',
+	'favBoardName2': '',
+	'favBoardURL2': '',
+	'favBoardName3': '',
+	'favBoardURL3': '',
+	'favBoardName4': '',
+	'favBoardURL4': '',
+	'favBoardName5': '',
+	'favBoardURL5': '',
 };
 
 function getSetting(key) {
@@ -953,7 +955,7 @@ function initKeyboardShortcuts() { //Pashe, heavily influenced by Tux et al, MIT
 	});
 }
 
-function initCatalog() { //Pashe, MIT
+function initCatalog() { //Pashe, vol4, MIT
 	if (!isOnCatalog()) {return;}
 	
 	//addCatalogPages
@@ -971,7 +973,8 @@ function initCatalog() { //Pashe, MIT
 	};
 	
 	//Last Modified
-	$(".thread").each(function (e, ele) {
+	if (getSetting("lastUpdated")) {
+		$(".thread").each(function (e, ele) {
 			var $this = $(this);
 			var threadId = $this.html().match(/<a href="[^0-9]*([0-9]+).html?">/)[1];
 			var threadPage = getThreadPage(threadId, thisBoard, true);
@@ -987,6 +990,7 @@ function initCatalog() { //Pashe, MIT
 			lmTimeElement.html("<br>" + $.timeago(timestamp * 1000));
 			lmTimeElement.appendTo($this.find("strong").first());
 		});
+	}
 
 	//addCatalogNullImagePlaceholders
 	$("img[src=''], img[src='/static/no-file.png']").attr("src", "data:image/svg+xml;base64,PHN2ZyB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgaGVpZ2h0PSIyMDAiIHdpZHRoPSIyMDAiIHZlcnNpb249IjEuMSI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwtODYwKSI+PHRleHQgc3R5bGU9ImxldHRlci1zcGFjaW5nOjBweDt0ZXh0LWFuY2hvcjptaWRkbGU7d29yZC1zcGFjaW5nOjBweDt0ZXh0LWFsaWduOmNlbnRlcjsiIHhtbDpzcGFjZT0icHJlc2VydmUiIGZvbnQtc2l6ZT0iNjRweCIgeT0iOTMwIiB4PSI5NSIgZm9udC1mYW1pbHk9IidBZG9iZSBDbGVhbiBVSScsIHNhbnMtc2VyaWYiIGxpbmUtaGVpZ2h0PSIxMjUlIiBmaWxsPSIjMDAwMDAwIj48dHNwYW4geD0iOTUiIHk9IjkyOSI+Tm88L3RzcGFuPjx0c3BhbiB4PSI5NSIgeT0iMTAxMCI+SW1hZ2U8L3RzcGFuPjwvdGV4dD48L2c+PC9zdmc+");
