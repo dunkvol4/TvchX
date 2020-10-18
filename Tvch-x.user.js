@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.1
+// @version     3.1.1
 // @description Small userscript to improve tvch.moe
 // @grant       none
 
@@ -879,7 +879,8 @@ function initRevealImageSpoilers() { //vol4, Anonymous, Tux et al, MIT
 	if (!getSetting('revealImageSpoilers')) {return;}
     $('document').ready(function () {
         var revealSpoiler = function () {
-            $(this).children('img.post-image').attr('src', $(this).attr('href'));
+	    if ($(this).children('img.post-image').attr('src') == '../../static/spoiler.png')
+          	  $(this).children('img.post-image').attr('src', $(this).attr('href'));
             $(this).children('img.post-image').css({
 				"width":      "auto",
 				"height":     "auto",
