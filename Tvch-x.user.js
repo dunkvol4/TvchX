@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.0.3
+// @version     3.1
 // @description Small userscript to improve tvch.moe
 // @grant       none
 
@@ -875,37 +875,43 @@ function initMenu() { //Pashe and vol4, MIT
 	}
 }
 
-function initRevealImageSpoilers() { //Tux et al, MIT
+function initRevealImageSpoilers() { //vol4, Anonymous, Tux et al, MIT
 	if (!getSetting('revealImageSpoilers')) {return;}
-	$('.post-image').each(function() {
-		var pic;
-		if ($(this)[0].tagName == "IMG") {
-			pic = $(this);
-		} else if ($(this)[0].tagName == "CANVAS") {
-			pic = $(this).next();
-		} else {return;}
-
-		var picUrl = pic.attr("src");
-		if (picUrl.indexOf('spoiler.png') >= 0) {
-			pic.attr("src", $(this).parent().attr("href"));
-			pic.addClass("chx_unspoileredImage");
-
-			pic.css({
+    $('document').ready(function () {
+        var revealSpoiler = function () {
+            $(this).children('img.post-image').attr('src', $(this).attr('href'));
+            $(this).children('img.post-image').css({
 				"width":      "auto",
 				"height":     "auto",
 				"max-width":  "255px",
 				"max-height": "255px",
 			});
-		}
-	});
+        }
+
+        $('div.file').children('a[href*=".jpg"]').each(revealSpoiler);
+        $(document).on('new_post', function (e, post) {
+            $(post).find('div.file').children('a[href*=".jpg"]').each(revealSpoiler);
+        });
+        $('div.file').children('a[href*=".jpeg"]').each(revealSpoiler);
+        $(document).on('new_post', function (e, post) {
+            $(post).find('div.file').children('a[href*=".jpeg"]').each(revealSpoiler);
+        });
+        $('div.file').children('a[href*=".png"]').each(revealSpoiler);
+        $(document).on('new_post', function (e, post) {
+            $(post).find('div.file').children('a[href*=".png"]').each(revealSpoiler);
+        });
+        $('div.file').children('a[href*=".gif"]').each(revealSpoiler);
+        $(document).on('new_post', function (e, post) {
+            $(post).find('div.file').children('a[href*=".gif"]').each(revealSpoiler);
+        });
+    });
 }
 
-function initGifAnimate() { //vol4, based on an anonymous contribution, MIT
-
+function initGifAnimate() { //vol4, Anonymous, MIT
     if (!getSetting('GifAnimate')) {return;}
     $('document').ready(function () {
         var animateGif = function () {
-            if ($(this).children('img.post-image').attr('src') != '/static/spoiler.png')
+            if ($(this).children('img.post-image').attr('src') != '../../static/spoiler.png')
                 $(this).children('img.post-image').attr('src', $(this).attr('href'));
         }
 
