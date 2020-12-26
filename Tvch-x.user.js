@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.1.1
+// @version     3.1.2
 // @description Small userscript to improve tvch.moe
 // @grant       none
 
@@ -108,6 +108,7 @@ settingsMenu.innerHTML = sprintf('<span style="font-size:8pt;">TvchX %s</span>',
 + '<label>' + 'Mascot URL(s) (pipe separated):<br />' + '<input type="text" name="mascotUrl" style="width: 30em"></label><br>'
 + '<label>' + '<a href="http://strftime.net/">Date format</a>:<br />' + '<input type="text" name="dateFormat" style="width:30em"></label><br>'
 + '<label><input type="checkbox" name="localTime">' + 'Use local time' + '</label><br>'
++ '<label><input type="checkbox" name="modButt">' + 'Add link to mod.php' + '</label><br>'
 + '<hr>' //Filters
 + '<h3>Filters</h3>'
 + '<table style="text-align:center;">'
@@ -152,6 +153,7 @@ var defaultSettings = {
 	'reverseImageSearch': true,
 	'parseTimestampImage': true,
 	'localTime': true,
+	'modButt': false,
 	'dateFormat':"",
 	'mascotUrl':"",
 	'keyboardShortcutsEnabled': true,
@@ -833,6 +835,11 @@ function initMenu() { //Pashe and vol4, MIT
         var osf = $('<span class="sub" data-description="4"> [ <a href="' + fburl1 + '" title="Favorite 1">' + fbname1 + '</a> / <a href="' + fburl2 + '" title="Favorite 1">' + fbname2 + '</a> / <a href="' + fburl3 + '" title="Favorite 1">' + fbname3 + '</a> / <a href="' + fburl4 + '" title="Favorite 1">' + fbname4 + '</a> / <a href="' + fburl5 + '" title="Favorite 1">' + fbname5 + '</a> ]</span>');
         osf.appendTo(menu);
     }
+
+    if (getSetting('modButt')) {
+        var gear = $('<span class="sub" data-description="5"> [ <a href="/mod.php?" title="Moderation Dashboard"><i class="fa fa-cog" title=""></i></a> ]</span>');
+        gear.appendTo(menu)
+        }
 
 	if (getSetting('catalogLinks')) {
         	$('.favorite-boards a').each(function () {
