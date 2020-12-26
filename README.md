@@ -13,7 +13,8 @@ This userscript adds various features and options like:
  * Post and image counts in the menu
  * Many other poorly written hacks
 
-TvchX contains modifications designed to improve compatibility with NPFchan. 
+TvchX contains slight modifications designed to improve compatibility with NPFchan, but still mostly works with Infinity sites as well. Though TvchX's main purpose is to improve tvch, it's been successfully tested on smuglo.li, wizchan, and 8kun. By default TvchX is configured to work with tvch and smuglo.li.
+
 There are also at the time of this writing two (poorly-implemented) features that weren't in the original 8chanX:
   * Animate .gif thumbnails
   * Off-site favorites
