@@ -4,6 +4,9 @@
 // @version     3.1.2
 // @description Small userscript to improve tvch.moe
 // @grant       none
+// @namespace   https://github.com/dunkvol4/TvchX
+// @updateURL   https://github.com/dunkvol4/TvchX/blob/main/Tvch-x.meta.js
+// @downloadURL https://github.com/dunkvol4/TvchX/blob/main/Tvch-x.user.js
 
 // @require     https://code.jquery.com/ui/1.11.2/jquery-ui.min.js
 // @require     https://github.com/alexei/sprintf.js/raw/master/src/sprintf.js
