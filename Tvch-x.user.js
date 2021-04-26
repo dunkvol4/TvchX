@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        TvchX
 // @namespace   TvchX
-// @version     3.1.2
+// @version     3.1.3
 // @description Small userscript to improve tvch.moe
 // @grant       none
 // @namespace   https://github.com/dunkvol4/TvchX
@@ -1098,11 +1098,12 @@ function initMascot() { //Pashe, based on an anonymous contribution, MIT
 	if (isOnCatalog()) {mascotImage.css("z-index", "-100");}
 }
 
-function initDefaultSettings() { //Pashe, MIT
+function initDefaultSettings() { //Pashe, vol4, MIT
 	if (window.localStorage.color_ids === undefined) window.localStorage.color_ids = true;
 	if (window.localStorage.videohover === undefined) window.localStorage.videohover = true;
 	if (window.localStorage.catalogImageHover === undefined) window.localStorage.catalogImageHover = true;
 	if (window.localStorage.imageHover === undefined) window.localStorage.imageHover = true;
+	if (window.localStorage.file_dragdrop === undefined) window.localStorage.file_dragdrop = true;
 }
 
 
