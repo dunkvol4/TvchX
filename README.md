@@ -4,7 +4,7 @@ To install: https://github.com/dunkvol4/TvchX/raw/main/Tvch-x.user.js
 
 This userscript adds various features and options like:
  * Gallery
- * Filters
+ * Filters (Complete with stub-hiding)
  * Reverse image search
  * Flag preview
  * Mascots
@@ -28,7 +28,14 @@ Firefox|[Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonk
 Firefox|[Tampermonkey for Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
 Chrome |[Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
 
-####Key bindings
+HOW TO USE:
+1. Click [Options] in the top right corner of the site.
+2. Click TvchX in the dialogue that pops up.
+3. Enable and disable TvchX features to your heart's content.
+
+TvchX also modifies some of the settings in General upon installation. So if you dislike drag and drop file selection or image hover, you can go into General and disable it.
+
+HOW TO USE KEY BINDINGS:
 Key     | Function
 ----    | ----
 C       | Navigates to the catalog
